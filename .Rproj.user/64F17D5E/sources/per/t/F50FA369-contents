@@ -1,0 +1,512 @@
+round(s$fstatistic[1], 2),
+ifelse(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE) < 0.001, "<0.001",
+round(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE), 3))
+)
+# Tabel 1: Koefitsiendid
+gt_coef <- coef_df %>%
+gt() %>%
+tab_header(title = "Lineaarse mudeli koefitsiendid") %>%
+fmt_number(columns = 2:4, decimals = 3) %>%
+cols_label(
+Muutuja = "Muutuja",
+Hinnang = "Hinnang",
+Standardviga = "Standardviga",
+`t-statistika` = "t-statistika",
+`p-väärtus` = "p-väärtus"
+)
+library(gt)
+install.packages(gt)
+install.packages("gt")
+library(gt)
+library(knitr)
+library(dplyr)
+# Eeldame, et mudel on olemas
+model <- lm(load_duration_secs ~ log(cohort_size), data = data)
+s <- summary(model)
+# Koefitsiendid
+coef_df <- as.data.frame(s$coefficients) %>%
+mutate(
+Muutuja = c("Lõikepunkt (Intercept)", "Logaritmiline kohordisuurus"),
+Hinnang = round(Estimate, 3),
+Standardviga = round(`Std. Error`, 3),
+`t-statistika` = round(`t value`, 2),
+`p-väärtus` = ifelse(`Pr(>|t|)` < 0.001, "<0.001", round(`Pr(>|t|)`, 3))
+) %>%
+select(Muutuja, Hinnang, Standardviga, `t-statistika`, `p-väärtus`)
+# Mudeli üldised näitajad
+mudeli_statistika <- tibble(
+Näitaja = c(
+"Jäägi standardviga",
+"R-ruut",
+"Parandatud R-ruut",
+"F-statistika",
+"F p-väärtus"
+),
+Väärtus = c(
+round(s$sigma, 3),
+round(s$r.squared, 3),
+round(s$adj.r.squared, 3),
+round(s$fstatistic[1], 2),
+ifelse(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE) < 0.001, "<0.001",
+round(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE), 3))
+)
+# Tabelite kuvamine
+cat("### Lineaarse mudeli koefitsiendid\n")
+kable(coef_df, align = "lcccc", caption = "Tabel 1. Lineaarse regressioonimudeli koefitsiendid")
+cat("\n\n### Mudeli üldised statistilised näitajad\n")
+kable(mudeli_statistika, align = "lc", caption = "Tabel 2. Mudeli sobivuse näitajad")
+library(DT)
+library(dplyr)
+# Eeldame, et mudel on olemas
+model <- lm(load_duration_secs ~ log(cohort_size), data = data)
+s <- summary(model)
+# Koefitsiendid
+coef_df <- as.data.frame(s$coefficients) %>%
+mutate(
+Tüüp = "Koefitsient",
+Näitaja = c("Lõikepunkt (Intercept)", "Logaritmiline kohordisuurus"),
+Väärtus = round(Estimate, 3),
+`Standardviga` = round(`Std. Error`, 3),
+`t-statistika` = round(`t value`, 2),
+`p-väärtus` = ifelse(`Pr(>|t|)` < 0.001, "<0.001", round(`Pr(>|t|)`, 3))
+) %>%
+select(Tüüp, Näitaja, Väärtus, Standardviga, `t-statistika`, `p-väärtus`)
+# Üldised statistikud
+stats_df <- tibble(
+Tüüp = "Mudeli sobivus",
+Näitaja = c(
+"Jäägi standardviga",
+"R-ruut",
+"Parandatud R-ruut",
+"F-statistika",
+"F p-väärtus"
+),
+Väärtus = c(
+round(s$sigma, 3),
+round(s$r.squared, 3),
+round(s$adj.r.squared, 3),
+round(s$fstatistic[1], 2),
+ifelse(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE) < 0.001, "<0.001",
+round(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE), 3))
+),
+Standardviga = NA,
+`t-statistika` = NA,
+`p-väärtus` = NA
+)
+# Ühenda kõik kokku
+full_table <- bind_rows(coef_df, stats_df)
+# Kuvamine datatable'ina
+datatable(
+full_table,
+rownames = FALSE,
+colnames = c("Tüüp", "Näitaja", "Väärtus", "Standardviga", "t-statistika", "p-väärtus"),
+options = list(
+pageLength = 10,
+dom = 't',
+ordering = FALSE,
+columnDefs = list(list(className = 'dt-left', targets = 1))
+),
+caption = "Lineaarse mudeli tulemused: koefitsiendid ja üldised sobivusnäitajad"
+)
+library(DT)
+library(dplyr)
+# Eeldame, et mudel on olemas
+model <- lm(load_duration_secs ~ log(cohort_size), data = data)
+s <- summary(model)
+# Koefitsiendid
+coef_df <- as.data.frame(s$coefficients) %>%
+mutate(
+Tüüp = "Koefitsient",
+Näitaja = c("Lõikepunkt (Intercept)", "Logaritmiline kohordisuurus"),
+Väärtus = round(Estimate, 3),
+`Standardviga` = round(`Std. Error`, 3),
+`t-statistika` = round(`t value`, 2),
+`p-väärtus` = ifelse(`Pr(>|t|)` < 0.001, "<0.001", round(`Pr(>|t|)`, 3))
+) %>%
+select(Tüüp, Näitaja, Väärtus, Standardviga, `t-statistika`, `p-väärtus`)
+# Üldised statistikud
+stats_df <- tibble(
+Tüüp = "Mudeli sobivus",
+Näitaja = c(
+"Jäägi standardviga",
+"R-ruut",
+"Parandatud R-ruut",
+"F-statistika",
+"F p-väärtus"
+),
+Väärtus = c(
+round(s$sigma, 3),
+round(s$r.squared, 3),
+round(s$adj.r.squared, 3),
+round(s$fstatistic[1], 2),
+ifelse(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE) < 0.001, "<0.001",
+round(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE), 3))
+),
+Standardviga = NA,
+`t-statistika` = NA,
+`p-väärtus` = NA
+)
+# Ühenda kõik kokku
+full_table <- bind_rows(coef_df, stats_df)
+# Kuvamine datatable'ina
+datatable(
+full_table,
+rownames = FALSE,
+colnames = c("Tüüp", "Näitaja", "Väärtus", "Standardviga", "t-statistika", "p-väärtus"),
+options = list(
+pageLength = 10,
+dom = 't',
+ordering = FALSE,
+columnDefs = list(list(className = 'dt-left', targets = 1))
+)
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- df %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_time_secs, 2)) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- df %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_duration_secs, 2)) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- df %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_duration_secs, 2)) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- df %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_duration_secs, 2))) %>%
+arrange(cohort_size)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_duration_secs, 2))) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_duration_secs, 4))) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = round(mean(load_duration_secs))) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = mean(load_duration_secs)) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+scale_y_continuous(breaks = pretty_breaks(n = 10))
+library(ggplot2)
+library(dplyr)
+library(scales)
+# Loe CSV
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = mean(load_duration_secs)) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+# Arvuta iga kohordi suuruse kohta keskmine aeg
+summary_data <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = mean(load_duration_secs, na.rm = TRUE))
+# Joonise loomine
+ggplot(summary_data, aes(x = cohort_size, y = keskmine_aeg)) +
+geom_point(color = "steelblue", size = 3) +
+labs(
+x = "Kohordi suurus",
+y = "Keskmine aeg (sekundites)"
+) +
+scale_x_log10(
+breaks = c(100, 500, 1000, 5000, 10000,20000, 50000, 100000),
+labels = label_number(big.mark = "")
+)+
+scale_y_continuous(
+breaks = pretty_breaks(n = 10)
+) +
+theme_minimal(base_size = 14, base_family = "Roboto")+
+theme(
+plot.title = element_text(hjust = 0),
+panel.grid.major = element_line(size = 0.4),
+panel.grid.minor = element_line(size = 0.2)
+)
+library(DT)
+library(dplyr)
+# Eeldame, et mudel on olemas
+model <- lm(load_duration_secs ~ log(cohort_size), data = data)
+s <- summary(model)
+# Koefitsiendid
+coef_df <- as.data.frame(s$coefficients) %>%
+mutate(
+Tüüp = "Koefitsient",
+Näitaja = c("Lõikepunkt (Intercept)", "Logaritmiline kohordisuurus"),
+Väärtus = round(Estimate, 3),
+`Standardviga` = round(`Std. Error`, 3),
+`t-statistika` = round(`t value`, 2),
+`p-väärtus` = ifelse(`Pr(>|t|)` < 0.001, "<0.001", round(`Pr(>|t|)`, 3))
+) %>%
+select(Tüüp, Näitaja, Väärtus, Standardviga, `t-statistika`, `p-väärtus`)
+# Üldised statistikud
+stats_df <- tibble(
+Tüüp = "Mudeli sobivus",
+Näitaja = c(
+"Jäägi standardviga",
+"R-ruut",
+"Parandatud R-ruut",
+"F-statistika",
+"F p-väärtus"
+),
+Väärtus = c(
+round(s$sigma, 3),
+round(s$r.squared, 3),
+round(s$adj.r.squared, 3),
+round(s$fstatistic[1], 2),
+ifelse(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE) < 0.001, "<0.001",
+round(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE), 3))
+),
+Standardviga = NA,
+`t-statistika` = NA,
+`p-väärtus` = NA
+)
+# Ühenda kõik kokku
+full_table <- bind_rows(coef_df, stats_df)
+# Kuvamine datatable'ina
+datatable(
+full_table,
+rownames = FALSE,
+colnames = c("Tüüp", "Näitaja", "Väärtus", "Standardviga", "t-statistika", "p-väärtus"),
+options = list(
+pageLength = 10,
+dom = 't',
+ordering = FALSE,
+columnDefs = list(list(className = 'dt-left', targets = 1))
+)
+library(ggplot2)
+library(dplyr)
+library(scales)
+# Loe CSV
+library(dplyr)
+# Arvuta iga kohordisuuruse kohta keskmine aeg
+summary_table <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = mean(load_duration_secs)) %>%
+arrange(cohort_size)
+# Kuvamine
+print(summary_table)
+# Arvuta iga kohordi suuruse kohta keskmine aeg
+summary_data <- data %>%
+group_by(cohort_size) %>%
+summarise(keskmine_aeg = mean(load_duration_secs, na.rm = TRUE))
+# Joonise loomine
+ggplot(summary_data, aes(x = cohort_size, y = keskmine_aeg)) +
+geom_point(color = "steelblue", size = 3) +
+labs(
+x = "Kohordi suurus",
+y = "Keskmine aeg (sekundites)"
+) +
+scale_x_log10(
+breaks = c(100, 500, 1000, 5000, 10000,20000, 50000, 100000),
+labels = label_number(big.mark = "")
+)+
+scale_y_continuous(
+breaks = pretty_breaks(n = 10)
+) +
+theme_minimal(base_size = 14, base_family = "Roboto")+
+theme(
+plot.title = element_text(hjust = 0),
+panel.grid.major = element_line(size = 0.4),
+panel.grid.minor = element_line(size = 0.2)
+)
+library(DT)
+library(dplyr)
+# Eeldame, et mudel on olemas
+model <- lm(load_duration_secs ~ log(cohort_size), data = data)
+s <- summary(model)
+# Koefitsiendid
+coef_df <- as.data.frame(s$coefficients) %>%
+mutate(
+Tüüp = "Koefitsient",
+Näitaja = c("Lõikepunkt (Intercept)", "Logaritmiline kohordisuurus"),
+Väärtus = round(Estimate, 3),
+`Standardviga` = round(`Std. Error`, 3),
+`t-statistika` = round(`t value`, 2),
+`p-väärtus` = ifelse(`Pr(>|t|)` < 0.001, "<0.001", round(`Pr(>|t|)`, 3))
+) %>%
+select(Tüüp, Näitaja, Väärtus, Standardviga, `t-statistika`, `p-väärtus`)
+# Üldised statistikud
+stats_df <- tibble(
+Tüüp = "Mudeli sobivus",
+Näitaja = c(
+"Jäägi standardviga",
+"R-ruut",
+"Parandatud R-ruut",
+"F-statistika",
+"F p-väärtus"
+),
+Väärtus = c(
+round(s$sigma, 3),
+round(s$r.squared, 3),
+round(s$adj.r.squared, 3),
+round(s$fstatistic[1], 2),
+ifelse(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE) < 0.001, "<0.001",
+round(pf(s$fstatistic[1], s$fstatistic[2], s$fstatistic[3], lower.tail = FALSE), 3))
+),
+Standardviga = NA,
+`t-statistika` = NA,
+`p-väärtus` = NA
+)
+# Ühenda kõik kokku
+full_table <- bind_rows(coef_df, stats_df)
+# Kuvamine datatable'ina
+datatable(
+full_table,
+rownames = FALSE,
+colnames = c("Tüüp", "Näitaja", "Väärtus", "Standardviga", "t-statistika", "p-väärtus"),
+options = list(
+pageLength = 10,
+dom = 't',
+ordering = FALSE,
+columnDefs = list(list(className = 'dt-left', targets = 1))
+)
+install.packages("remotes")
+remotes::install_github("OHDSI/CohortDiagnostics")
+library(CohortDiagnostics)
+remotes::install_github("OHDSI/CohortDiagnostics")
+install.packages("CohortCharacteristics")
+install.packages("DatabaseConnector")
+install.packages("SqlRender")
+library(CohortCharacteristics)
+library(DatabaseConnector)
+library(SqlRender)
+readRenviron("~/.Renviron")
+DATABASE <- paste(Sys.getenv("DB_HOST"), "/", Sys.getenv("DB_NAME"), sep = "")
+DB_USER <- Sys.getenv("DB_USER")
+DB_PASSWORD <- Sys.getenv("DB_PASSWORD")
+DB_PORT <- Sys.getenv("DB_PORT")
+JDBC_JAR <- Sys.getenv("DATABASE_CONNECTOR_JAR")
+connectionDetails <- createConnectionDetails(
+dbms = "postgresql",
+server = DATABASE,
+user = DB_USER,
+password = DB_PASSWORD,
+port = DB_PORT,
+pathToDriver = dirname(JDBC_JAR)
+)
+con <- DatabaseConnector::connect(connectionDetails)
+source_schema <- "ohdsi_cdm_202501"         # OMOP schema
+cohort_schema <- "ohdsi_results_202501"     # Cohort schema
+target_schema <- "user_karin_rosenberg"     # Your own schema
+cohort_id <- 3            # Cohort ID
+result <- getCohortCharacteristics(
+connectionDetails = connectionDetails,
+cdmDatabaseSchema = source_schema,
+cohortDatabaseSchema = cohort_schema,
+cohortTable = "cohort",
+cohortId = cohort_id
+)
+install.packages("SqlRender")
+install.packages("DatabaseConnector")
+viewCharacteristicsTable(result)
+install.packages("CohortCharacteristics")
+install.packages("DatabaseConnector")
+install.packages("SqlRender")
+library(CohortCharacteristics)
+library(DatabaseConnector)
+library(SqlRender)
+readRenviron("~/.Renviron")
+DATABASE <- paste(Sys.getenv("DB_HOST"), "/", Sys.getenv("DB_NAME"), sep = "")
+DB_USER <- Sys.getenv("DB_USER")
+DB_PASSWORD <- Sys.getenv("DB_PASSWORD")
+DB_PORT <- Sys.getenv("DB_PORT")
+JDBC_JAR <- Sys.getenv("DATABASE_CONNECTOR_JAR")
+connectionDetails <- createConnectionDetails(
+dbms = "postgresql",
+server = DATABASE,
+user = DB_USER,
+password = DB_PASSWORD,
+port = DB_PORT,
+pathToDriver = dirname(JDBC_JAR)
+)
+source_schema <- "ohdsi_cdm_202501"         # OMOP schema
+cohort_schema <- "ohdsi_results_202501"     # Cohort schema
+target_schema <- "user_karin_rosenberg"     # Your own schema
+cohort_id <- 3            # Cohort ID
+result <- getCohortCharacteristics(
+connectionDetails = connectionDetails,
+cdmDatabaseSchema = source_schema,
+cohortDatabaseSchema = cohort_schema,
+cohortTable = "cohort",
+cohortId = cohort_id
+)
+con <- DatabaseConnector::connect(connectionDetails)
+source_schema <- "ohdsi_cdm_202501"         # OMOP schema
+cohort_schema <- "ohdsi_results_202501"     # Cohort schema
+target_schema <- "user_karin_rosenberg"     # Your own schema
+cohort_id <- 3            # Cohort ID
+result <- getCohortCharacteristics(
+connectionDetails = connectionDetails,
+cdmDatabaseSchema = source_schema,
+cohortDatabaseSchema = cohort_schema,
+cohortTable = "cohort",
+cohortId = cohort_id
+)
+install.packages("CohortCharacteristics")
+install.packages("DatabaseConnector")
+install.packages("SqlRender")
+library(CohortCharacteristics)
+library(DatabaseConnector)
+library(SqlRender)
+readRenviron("~/.Renviron")
+DATABASE <- paste(Sys.getenv("DB_HOST"), "/", Sys.getenv("DB_NAME"), sep = "")
+DB_USER <- Sys.getenv("DB_USER")
+DB_PASSWORD <- Sys.getenv("DB_PASSWORD")
+DB_PORT <- Sys.getenv("DB_PORT")
+JDBC_JAR <- Sys.getenv("DATABASE_CONNECTOR_JAR")
+connectionDetails <- createConnectionDetails(
+dbms = "postgresql",
+server = DATABASE,
+user = DB_USER,
+password = DB_PASSWORD,
+port = DB_PORT,
+pathToDriver = dirname(JDBC_JAR)
+)
+con <- DatabaseConnector::connect(connectionDetails)
+source_schema <- "ohdsi_cdm_202501"         # OMOP schema
+cohort_schema <- "ohdsi_results_202501"     # Cohort schema
+target_schema <- "user_karin_rosenberg"     # Your own schema
+cohort_id <- 3            # Cohort ID
+result <- summariseCohortAttrition(source_schema$cohort)
+install.packages("SqlRender")
+install.packages("DatabaseConnector")
+viewCharacteristicsTable(result)
+library(duckdb)
+shiny::runApp('~/CohortExplorer/R')
+runApp('~/CohortExplorer/R')
+shiny::runApp('~/CohortExplorer/R')
+runApp('~/CohortExplorer/R')

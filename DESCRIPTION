@@ -1,0 +1,9 @@
+Package: CohortExplorer
+Type: Package
+Title: Cohort Explorer
+Version: 0.1.0
+Author: Karin Rosenberg
+Maintainer: The package maintainer <karin800000@gmail.com>
+Description: Package to visualize and describe cohorts.
+Encoding: UTF-8
+LazyData: true
