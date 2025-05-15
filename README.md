@@ -1,7 +1,7 @@
-# CohortExplorer
+# CohortExplorerICD
 
 ## Kirjeldus
-**CohortExplorer** on R-pakett, mis valmis 2025. aastal bakalaureusetöö raames.  
+**CohortExplorerICD** on R-pakett, mis valmis 2025. aastal bakalaureusetöö raames.  
 Bakalaureusetöö eesmärk oli arendada tööriist, mis kirjeldaks kohorte Observational Medical Outcomes Partnership (OMOP) kujul terviseandmetel.
 
 R-paketi töövoog sisaldab:
@@ -26,10 +26,10 @@ Puuduvad R-paketid paigaldatakse rakenduse käivitamisel automaatselt.
 
 ---
 
-# CohortExplorer
+# CohortExplorerICD
 
 ## Description
-*CohortExplorer* is an R package developed in 2025 as part of a bachelor's thesis project.  
+*CohortExplorerICD* is an R package developed in 2025 as part of a bachelor's thesis project.  
 The goal of the thesis was to develop a tool for describing cohorts based on health data structured according to the **Observational Medical Outcomes Partnership (OMOP) Common Data Model (CDM)**.
 
 The workflow of the R package includes:
