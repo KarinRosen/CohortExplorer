@@ -1,6 +1,6 @@
-Package: CohortExplorer
+Package: CohortExplorerICD
 Type: Package
-Title: Cohort Explorer
+Title: CohortExplorerICD
 Version: 0.1.0
 Author: Karin Rosenberg
 Maintainer: The package maintainer <karin800000@gmail.com>
